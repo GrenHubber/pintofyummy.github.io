@@ -1,0 +1,82 @@
+<html>
+  <head>
+      <style>
+    body {
+        background-color: #131313
+}
+label {
+    position: relative;
+        top: 220px; left: 600px;
+    color: #fc9403
+}
+
+input {
+    position: relative;
+    top: 220px; left: 600px;
+}
+
+textarea {
+    position: relative;
+        top: 250px; left: 685px;
+}
+
+button {
+    position: relative;
+        top: 350px; left: 600px;
+        background-color: #131313;
+        border: none;
+        color: red;
+        cursor: pointer;
+        font-weight: bold;
+</style>
+  </head>
+  <body class="container mt-5">
+    <form onsubmit="sendContact(event)">
+      <div class="mb-3">
+        <label for="emailInput" class="form-label">Enter your username if you wish</label>
+        <input type="text" class="form-control" id="emailInput">
+      </div>
+      <div class="mb-3">
+        <label for="messageInput" class="form-label">Enter your message</label>
+        <textarea class="form-control" id="messageInput" rows="3"></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Send the message</button>
+    </form>
+    <script>
+      async function sendContact(ev) {
+        ev.preventDefault();
+
+        const senderEmail = document
+          .getElementById('emailInput').value;
+        const senderMessage = document
+          .getElementById('messageInput').value;
+
+        const webhookBody = {
+          embeds: [{
+            title: 'Someone sent a public message!',
+            fields: [
+              { name: 'Who sent it?', value: senderEmail },
+              { name: 'What did the person say?', value: senderMessage }
+            ]
+          }],
+        };
+
+        const webhookUrl = 'https://discord.com/api/webhooks/1139384582228160542/ut4MC0MZma2gvm4VMnjsoKyS6eJPxG0-1OB4cyXVo3j5HIwhoBecc3naIvwE6ZjRsl1r';
+
+        const response = await fetch(webhookUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(webhookBody),
+        });
+
+        if (response.ok) {
+          alert('message sent');
+        } else {
+          alert('oh shit, i didnt work');
+        }
+      }
+    </script>
+  </body>
+</html>
